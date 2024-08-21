@@ -1,0 +1,33 @@
+services:
+  db:
+    build: 
+      context: db
+    container_name: mysql
+    restart: always
+    volumes:
+      - ./mysql-db:/var/lib/mysql
+    env_file: 
+      - env_mysql.env
+    ports:
+      - '3306:3306'
+    networks:
+      - backnet
+
+  backend:
+    build:
+      context: backend
+    restart: always
+    container_name: flask-app
+    volumes: 
+      - ./backend:/backend
+    ports:
+      - '5000:5000'
+    networks:
+      - backnet
+
+volumes:
+  mysql-db:
+    driver: local
+
+networks:
+  backnet:
